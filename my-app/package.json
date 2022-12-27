@@ -5,6 +5,8 @@
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.6.3",
     "@huddle01/huddle01-client": "^0.0.10",
+    "@pushprotocol/restapi": "^0.2.2",
+    "@pushprotocol/uiweb": "^0.2.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -14,6 +16,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4",
     "web3modal": "^1.9.10"
   },
