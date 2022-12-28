@@ -3,12 +3,14 @@ import { NotificationItem, chainNameType } from "@pushprotocol/uiweb";
 import { useState } from "react";
 
 export default function Notification(props){
-    const signer = props.signer;
+
+    
     let notifications;
       const [rendered,setRendered] = useState([]);
       async function getNot(){
+        const signer = await props.signer(true);
       notifications = await PushAPI.user.getFeeds({
-            user: 'eip155:5:0x294d985B6BC5dA375b571B5fDE228334343f4EdF', // user address in CAIP
+            user: `eip155:5:${await signer.getAddress()}`, // user address in CAIP
             env: 'staging'
           });
         console.log(notifications)
@@ -52,7 +54,7 @@ export default function Notification(props){
         const sendNotification = async() => {
             try {
     
-              props.connect()
+              const signer = await props.signer(true);
               console.log("signer in send",signer)
             //   let subscriptions = await PushAPI.user.getSubscriptions({
             //     user: 'eip155:5:0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161', // user address in CAIP
@@ -76,7 +78,7 @@ export default function Notification(props){
                   cta: 'www.about.com',
                   img: ''
                 },
-                recipients: 'eip155:5:0x294d985B6BC5dA375b571B5fDE228334343f4EdF', // recipient address
+                recipients: `eip155:5:${props.receiptent}`, // recipient address //get value from input box
                 channel: 'eip155:5:0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161', // your channel address
                 env: 'staging'
               });
@@ -92,6 +94,8 @@ export default function Notification(props){
 
                     
         <div className="get-notif">
+        <button onClick={getNot}>get Notification</button>
+        
         {console.log("render before-",rendered)}
   
         {rendered}

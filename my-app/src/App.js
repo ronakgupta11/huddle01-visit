@@ -1,6 +1,6 @@
-import logo from './logo.svg';
+
 import './App.css';
-// import Home from './components/home';
+
 import Main from './components/main';
 import {HuddleClientProvider, getHuddleClient } from '@huddle01/huddle01-client';
 import MeVideoElem from './components/MeVideoElem';
@@ -9,44 +9,54 @@ import { useState } from 'react';
 import { useHuddleStore } from "@huddle01/huddle01-client/store";
 import {ethers} from "ethers";
 import Web3Modal from "web3modal";
-import * as PushAPI from "@pushprotocol/restapi";
+// import * as PushAPI from "@pushprotocol/restapi";
 
 import Notification from './components/Notification';
 
 
 function App() {
 
+  const huddleClient = getHuddleClient("702b03a76c58010686023dac1caeb63696b04b1c069ef14405b4ede34ed1586b");
   const peersKeys = useHuddleStore((state) => Object.keys(state.peers));
   const lobbyPeers = useHuddleStore((state) => state.lobbyPeers);
-  const [address, setAddress] = useState("");
-  const huddleClient = getHuddleClient("702b03a76c58010686023dac1caeb63696b04b1c069ef14405b4ede34ed1586b");
-  
+
   const [walletConnected, setWalletConnected] = useState(false);
+  const [address, setAddress] = useState("");
+
+  const [recptAddress,setRecptAddress] = useState("");
+  
   const web3Modal = new Web3Modal({
         network: "goerli",
         providerOptions : {},
         disableInjectedProvider: false,
       });
 
-    let signer;
-    let provider; 
+    ;
 
-    let instance;
+    const getProviderOrSigner = async(needSigner = false) => {
+      const instance = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(instance);
+      if(needSigner){
+        const signer = provider.getSigner();
+        return signer;
+
+      }
+      return provider;
+    }
 
     async function connectWallet(){
 
-        instance = await web3Modal.connect();
-        provider = new ethers.providers.Web3Provider(instance);
-        signer = provider.getSigner();
+
+        const signer = await getProviderOrSigner(true);
         setAddress(await signer.getAddress());
         setWalletConnected(true);
         console.log(signer);
         }
-    console.log(signer);
+    // console.log(signer);
     async function disconnect(){
         await web3Modal.clearCachedProvider();
-        provider = null;
-        signer = null;
+        // provider = null;
+        // signer = null;
         setWalletConnected(false);
         renderButton();
         setAddress("");
@@ -67,22 +77,84 @@ function App() {
             )
         }
     }
+
+    const handleJoin = async () => {
+      try {
+        await huddleClient.join("dev", {
+          address: address,
+          wallet: "",
+          ens: "",
+        });
+  
+        console.log("joined");
+      } catch (error) {
+        console.log({ error });
+      }
+    };
+
+
+    const renderMeetContainer = () =>{
+      return (
+        <div>
+          <HuddleClientProvider value={huddleClient}>
+            
+            <div className="">
+              <div className="">
+                <MeVideoElem />
+              </div>
+  
+              <div className="">
+                <div className="">
+                  {peersKeys.map((key) => (
+                    <PeerVideoAudioElem key={`peerId-${key}`} peerIdAtIndex={key} />
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="">
+              <button onClick={handleJoin}>Join Room</button>
+              <button onClick={() => huddleClient.enableWebcam()}>
+                Enable Webcam
+              </button>
+              <button onClick={() => huddleClient.disableWebcam()}>
+                Disable Webcam
+              </button>
+              {/* <button onClick={() => huddleClient.allowAllLobbyPeersToJoinRoom()}>
+                allowAllLobbyPeersToJoinRoom()
+              </button> */}
+              {/* <button onClick={() => setStatus(false) }>
+                Exit
+              </button> */}
+            </div>
+          </HuddleClientProvider>
+        </div>
+      );
+    }
   
   return (
-    <HuddleClientProvider client = {huddleClient} >
+    // <HuddleClientProvider client = {huddleClient} >
 
     <div className="App">
-    <div className="hom">
+      <div className="hom">
             <h1 className='heading'>Caller</h1>
             <p className='des'>decentralized wallet to wallet video calling platform.</p>
             {renderButton()}
+
+      </div>
+      <div className='input-sec'>
+              <p>enter wallet address to make call to:</p>
+              <input type = "text" placeholder= "enter wallet address"></input>
+              <button >request a video call</button>
+        {//use setRecptAddress to set recipents address
+}
+      </div>
             {/* <button onClick={sendNotification}>send</button>      */}
-        </div>
       {/* <Home address = {address} set = {setAddress}/> */}
-      <Main address = {address} client = {huddleClient}/>
-      <Notification connect = {connectWallet} signer = {signer}/>
-      <MeVideoElem/>
-      <div className='peer-section'>
+      {/* <Main  setRecpt = {setRecptAddress} address = {address} client = {huddleClient}/> */}
+      <Notification  receiptent = {recptAddress} signer = {getProviderOrSigner}/>
+      {renderMeetContainer()}
+      {/* <MeVideoElem/> */}
+      {/* <div className='peer-section'>
 
       <p>---------peer section------------</p>
       {lobbyPeers[0] && <h2>Lobby Peers</h2>}
@@ -99,9 +171,9 @@ function App() {
               <PeerVideoAudioElem key={`peerId-${key}`} peerIdAtIndex={key} />
               ))}
             </div>
-            </div>
+            </div> */}
     </div>
-    </HuddleClientProvider>
+    // </HuddleClientProvider>
     
   );
 }
