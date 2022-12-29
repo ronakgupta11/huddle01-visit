@@ -1,7 +1,7 @@
 
 import './App.css';
 
-import Main from './components/main';
+// import Main from './components/main';
 import {HuddleClientProvider, getHuddleClient } from '@huddle01/huddle01-client';
 import MeVideoElem from './components/MeVideoElem';
 import PeerVideoAudioElem from './components/PeerVideoAudioElem';
@@ -19,6 +19,7 @@ function App() {
   const huddleClient = getHuddleClient("702b03a76c58010686023dac1caeb63696b04b1c069ef14405b4ede34ed1586b");
   const peersKeys = useHuddleStore((state) => Object.keys(state.peers));
   const lobbyPeers = useHuddleStore((state) => state.lobbyPeers);
+  const isJoined = useHuddleStore((state) => state.roomState.joined);
 
   const [walletConnected, setWalletConnected] = useState(false);
   const [address, setAddress] = useState("");
@@ -87,9 +88,26 @@ function App() {
         });
   
         console.log("joined");
+        console.log(isJoined);
       } catch (error) {
         console.log({ error });
       }
+    };
+
+    const handleToggleRoomLock = async () => {
+      if (!huddleClient) {
+        console.error('huddleClient is not initialized');
+  
+        return;
+      }
+      if(isJoined){
+
+
+      await huddleClient.toggleRoomLock();
+      console.log("toogled room lock")}
+      else{
+      console.log("is joined",isJoined)
+      console.log("cant toogle host not joined")}
     };
 
 
@@ -125,6 +143,7 @@ function App() {
               {/* <button onClick={() => setStatus(false) }>
                 Exit
               </button> */}
+              <button onClick={handleToggleRoomLock}>Toogle Room Lock</button>
             </div>
           </HuddleClientProvider>
         </div>
