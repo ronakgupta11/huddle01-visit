@@ -96,7 +96,7 @@ export default function Notification(props){
         <div className="get-notif">
         <button onClick={getNot}>get Notification</button>
         
-        {console.log("render before-",rendered)}
+        {/* {console.log("render before-",rendered)} */}
   
         {rendered}
           </div> 
