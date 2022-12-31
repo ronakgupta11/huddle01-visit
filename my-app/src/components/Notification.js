@@ -1,21 +1,25 @@
 import * as PushAPI from "@pushprotocol/restapi";
 import { NotificationItem, chainNameType } from "@pushprotocol/uiweb";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Notification(props){
+  
+  
+  let repeat;
+  const [notifications,setNotifications] = useState([]);
+  const [recptAddress,setRecptAddress] = useState("");
 
-    
-    let notifications;
-      const [rendered,setRendered] = useState([]);
-      async function getNot(){
+  const [message,setMessage] = useState("")
+
+  async function getNot(){
+        // window.location.reload(false)
         const signer = await props.signer(true);
-      notifications = await PushAPI.user.getFeeds({
+        const notificationsFromApi = await PushAPI.user.getFeeds({
             user: `eip155:5:${await signer.getAddress()}`, // user address in CAIP
             env: 'staging'
           });
-        console.log(notifications)
-      
-      // getNot();
+        setNotifications(notificationsFromApi);
+        console.log("notificatio ",notifications)
       const rendered_not = notifications.map((oneNotification, i) => {
         const { 
             cta,
@@ -45,25 +49,14 @@ export default function Notification(props){
             />
             );
           });
-          setRendered(rendered_not);
-          // console.log("rendered-notif",rendered);
-          // return(
-          //   <div>{rendered}</div>
-          // );
+        props.renderNot(rendered_not);
+        // console.log(rendered);
+        // repeat = setInterval(getNot,15000);
         }
         const sendNotification = async() => {
             try {
     
               const signer = await props.signer(true);
-              console.log("signer in send",signer)
-            //   let subscriptions = await PushAPI.user.getSubscriptions({
-            //     user: 'eip155:5:0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161', // user address in CAIP
-            //     env: 'staging'
-            //   });
-            //   console.log(subscriptions)
-    
-    
-    
               const apiResponse = await PushAPI.payloads.sendNotification({
                 signer,
                 type: 3, // target
@@ -73,12 +66,12 @@ export default function Notification(props){
                   body: `[sdk-test] notification BODY Testing notification`
                 },
                 payload: {
-                  title: `call requested from ${await signer.getAddress()}`,
-                  body: `to join call go to bellow link`,
-                  cta: 'www.about.com',
+                  title: `8. call requested from ${await signer.getAddress()}`,
+                  body: `${message} [u:https://www.google.com]`,
+                  cta: `google.com`,
                   img: ''
                 },
-                recipients: `eip155:5:${props.receiptent}`, // recipient address //get value from input box
+                recipients: `eip155:5:${recptAddress}`, // recipient address //get value from input box
                 channel: 'eip155:5:0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161', // your channel address
                 env: 'staging'
               });
@@ -89,22 +82,29 @@ export default function Notification(props){
               console.error('Error: ', err);
             }
           }
+          function handleInputChange(event){
+            console.log(event.target.value);
+            setRecptAddress(event.target.value)
+          }
+        
+          function handleMsgChange(event){
+            setMessage(event.target.value);
+            // console.log(event.target.value);
+            // console.log(message);
+          }
+
         return(
         <div className="notification-section">
-
-                    
-        <div className="get-notif">
-        <button onClick={getNot}>get Notification</button>
-        
-        {/* {console.log("render before-",rendered)} */}
-  
-        {rendered}
+          <div className="send-notif">
+            
+            <input type="text" onChange = {handleInputChange} placeholder ="enter wallet address"></input>
+            <input type="text" onChange = {handleMsgChange} placeholder ="enter call msg"></input>
+            <button onClick={sendNotification}>request Call</button>     
+          </div>
+          <div className="get-notif">
+            <button onClick={getNot}>get Notification</button>
+            {props.notification[0]}
           </div> 
-        <div className="send-notif">
-        <button onClick={sendNotification}>send</button>     
-
-
-        </div>
         </div>
         )
 }

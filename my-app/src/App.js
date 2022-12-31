@@ -23,8 +23,9 @@ function App() {
 
   const [walletConnected, setWalletConnected] = useState(false);
   const [address, setAddress] = useState("");
+  const [rendered,setRendered] = useState([]);
 
-  const [recptAddress,setRecptAddress] = useState("");
+
   
   const web3Modal = new Web3Modal({
         network: "goerli",
@@ -149,7 +150,8 @@ function App() {
         </div>
       );
     }
-  
+
+
   return (
     // <HuddleClientProvider client = {huddleClient} >
 
@@ -160,17 +162,17 @@ function App() {
             {renderButton()}
 
       </div>
-      <div className='input-sec'>
-              <p>enter wallet address to make call to:</p>
-              <input type = "text" placeholder= "enter wallet address"></input>
-              <button >request a video call</button>
+      {/* <div className='input-sec'> */}
+              {/* <p>enter wallet address to make call to:</p> */}
+              {/* <input type = "text" placeholder= "enter wallet address" onChange={handleInputChange}></input> */}
+              {/* <button >request a video call</button> */}
         {//use setRecptAddress to set recipents address
 }
-      </div>
+      {/* </div> */}
             {/* <button onClick={sendNotification}>send</button>      */}
       {/* <Home address = {address} set = {setAddress}/> */}
       {/* <Main  setRecpt = {setRecptAddress} address = {address} client = {huddleClient}/> */}
-      <Notification  receiptent = {recptAddress} signer = {getProviderOrSigner}/>
+      <Notification notification = {rendered} renderNot = {setRendered} join = {handleJoin} signer = {getProviderOrSigner}/>
       {renderMeetContainer()}
       {/* <MeVideoElem/> */}
       {/* <div className='peer-section'>
