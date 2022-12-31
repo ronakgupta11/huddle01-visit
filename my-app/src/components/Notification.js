@@ -34,6 +34,8 @@ export default function Notification(props){
         } = oneNotification;
     
         return (
+          <div>
+
             <NotificationItem
                 key={`notif-${i}`} // any unique id
                 notificationTitle={title}
@@ -46,10 +48,13 @@ export default function Notification(props){
                 theme="light"
                 chainName={blockchain}
                 // chainName={blockchain as chainNameType} // if using Typescript
-            />
+                />
+                <button onClick={()=>handleJoin()}>join Now</button>
+                </div>
             );
           });
         props.renderNot(rendered_not);
+        console.log(window.location.href)
         // console.log(rendered);
         // repeat = setInterval(getNot,15000);
         }
@@ -67,8 +72,8 @@ export default function Notification(props){
                 },
                 payload: {
                   title: `8. call requested from ${await signer.getAddress()}`,
-                  body: `${message} [u:https://www.google.com]`,
-                  cta: `google.com`,
+                  body: `${message} [u:#join]`,
+                  cta: "google.com/?join=true",
                   img: ''
                 },
                 recipients: `eip155:5:${recptAddress}`, // recipient address //get value from input box
@@ -91,6 +96,11 @@ export default function Notification(props){
             setMessage(event.target.value);
             // console.log(event.target.value);
             // console.log(message);
+          }
+          const url = window.location.href;
+          const urlParam = url.split("=");
+          if(urlParam[1]===true){
+            
           }
 
         return(

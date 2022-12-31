@@ -5,6 +5,7 @@
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.6.3",
     "@huddle01/huddle01-client": "^0.0.10",
+    "@huddle01/huddle01-iframe": "^0.0.8",
     "@pushprotocol/restapi": "^0.2.2",
     "@pushprotocol/uiweb": "^0.2.3",
     "@testing-library/jest-dom": "^5.16.5",
