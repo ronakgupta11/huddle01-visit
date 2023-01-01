@@ -1,5 +1,5 @@
-
-import './App.css';
+import "./App.css"
+import "./default.css"
 
 // import Main from './components/main';
 import {HuddleClientProvider, getHuddleClient } from '@huddle01/huddle01-client';
@@ -13,7 +13,7 @@ import * as PushAPI from "@pushprotocol/restapi";
 import { NotificationItem, chainNameType } from "@pushprotocol/uiweb";
 // import * as PushAPI from "@pushprotocol/restapi";
 import { HuddleIframe, huddleIframeApp, HuddleAppEvent  } from "@huddle01/huddle01-iframe";
-
+import Features from "./components/features";
 
 
 
@@ -58,7 +58,7 @@ function App() {
       return provider;
     }
 
-    async function connectWalleta(){
+    async function connectWallet(){
 
 
         const signer = await getProviderOrSigner(true);
@@ -78,16 +78,19 @@ function App() {
     function renderButton(){
         if(walletConnected){
             return(
-                <div>
+                <div className="wallet-ctn">
 
-                <p>wallet address = {address}</p>
-                <button onClick={disconnect}>disconnect wallet</button>
+                <p className="wallet-add">{address}</p>
+                <button className = "btn-mod btn-dis"onClick={disconnect}>disconnect wallet</button>
                 </div>
             )
         }
         else{
             return(
-                <button onClick={connectWalleta}>Connect Wallet</button>
+              <div>
+
+                <button className="btn-mod" onClick={connectWallet}>Connect Wallet</button>
+              </div>
             )
         }
     }
@@ -128,24 +131,15 @@ function App() {
 
     const renderMeetContainer = () =>{
       return (
-        <div>
-          <HuddleClientProvider value={huddleClient}>
+        <HuddleClientProvider value={huddleClient}>
+            <div className="meet-container">
             
-            <div className="">
-              <div className="">
+            <div className="me">
+              <div className="me-video">
                 <MeVideoElem />
               </div>
-  
-              <div className="">
-                <div className="">
-                  {peersKeys.map((key) => (
-                    <PeerVideoAudioElem key={`peerId-${key}`} peerIdAtIndex={key} />
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="">
-              {/* <button  onClick={handleJoin}>Join Room</button> */}
+              <div className="vid-btn">
+              
               <button onClick={() => huddleClient.enableWebcam()}>
                 Enable Webcam
               </button>
@@ -161,11 +155,19 @@ function App() {
               <button onClick={() => huddleClient.enableMic()}>
                 Exit
               </button>
-
-              {/* <button onClick={handleToggleRoomLock}>Toogle Room Lock</button> */}
             </div>
-          </HuddleClientProvider>
+  
+                  </div>
+              <div className="peer">
+                <div className="me-video">
+                  {peersKeys.map((key) => (
+                    <PeerVideoAudioElem key={`peerId-${key}`} peerIdAtIndex={key} />
+                  ))}
+                </div>
+              </div>
+  
         </div>
+          </HuddleClientProvider>
       );
     }
 
@@ -217,7 +219,7 @@ function App() {
         }
         const sendNotification = async() => {
             try {
-              connectWalleta();
+              connectWallet();
               const signer = await getProviderOrSigner(true);
               const apiResponse = await PushAPI.payloads.sendNotification({
                 signer,
@@ -288,31 +290,32 @@ function App() {
   return (
 
 
-    <div className="App">
-      <div className="home">
-            <h1 className='heading'>Caller</h1>
-            <p className='des'>decentralized wallet to wallet video calling platform.</p>
+    <div className= "main">
+      <div className= "head">
+            <h1 className= "head-h1">Caller</h1>
+            <p className="head-p">A decentralized wallet to wallet video calling platform made using huddle01 and Push protocol</p>
             {renderButton()}
       </div>
 
-      <div className="notification-section">
-          <div className="send-notif">
+      {!incall && <div className="notification-section">
+          <div className="form">
             
-            <input type="text" onChange = {handleInputChange} placeholder ="enter wallet address"></input>
-            <input type="text" onChange = {handleMsgChange} placeholder ="enter call msg"></input>
-            <button onClick={sendNotification}>request Call</button>     
+            <input className="input-form" type="text" onChange = {handleInputChange} placeholder ="enter wallet address"></input>
+            <input className="input-form" type="text" onChange = {handleMsgChange} placeholder ="enter call msg"></input>
+            <button className="btn-mod" onClick={sendNotification}>request Call</button>     
           </div>
           <div className="get-notif">
             <button onClick={getNot}>get Notification</button>
             {rendered[0]}
           </div> 
-      </div>
+    </div>}
       {incall && renderMeetContainer()}
           
-      {(iframe === true) && <HuddleIframe config={iframeConfig} />}
+      {/* {(iframe === true) && <HuddleIframe config={iframeConfig} />} */}
       {/* <button onClick={renderIframe}>get Iframe</button> */}
-
+    {!incall && <Features/>}
     </div>
+
 
     
   );

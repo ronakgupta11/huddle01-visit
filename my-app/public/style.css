@@ -1,0 +1,101 @@
+*{
+    margin: 0;
+    padding: 0;
+
+}
+.main{
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.head-h1{
+    color: #1de9b6;
+    margin: auto;
+    font-family: cursive;
+    font-size: 70px;
+    margin: 10px;
+}
+.head-p{
+    color: white;
+    font-size: 20px;
+    font-family: cursive;
+    margin: 20px;
+}
+.input-form{
+    width: 200px;
+    height: 50px;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: medium;
+    background: transparent;
+    border:1px solid #1de9b6;
+    color: white;
+    margin: 10px 0px;
+}
+.btn-mod{
+    width: 200px;
+    padding: auto;
+    height: 60px;
+    border-radius: 15px;
+    font-size: medium;
+    color: black;
+    font-weight: 500;
+    background: #1de9b6;
+    font-family: cursive;
+}
+.head{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10%;
+    margin-bottom: 5%;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.meet-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 90%;
+    margin: 20px;
+
+}
+.me{
+    width: 45%;
+    border: 1px solid #1de9b6;
+    border-radius: 5px;
+    height: 300px;
+
+}
+.peer{
+    width: 45%;
+    border: 1px solid #1de9b6;
+    border-radius: 5px;
+    height: 300px;
+
+}
+.me-video{
+    
+    width: 100%;
+    height: 100%;
+
+}
+
+.vid-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+}
+.btn-sm-mod{
+width: 34px;
+height: 34px;
+margin: 10px;
+
+}
