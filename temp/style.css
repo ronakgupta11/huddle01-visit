@@ -11,7 +11,7 @@
     justify-content: center;
 }
 .head-h1{
-    color: #1de9b6;
+    color: #66ee78;
     margin: auto;
     font-family: cursive;
     font-size: 70px;
@@ -30,7 +30,7 @@
     padding: 10px;
     font-size: medium;
     background: transparent;
-    border:1px solid #1de9b6;
+    border:1px solid  #ed2e71;
     color: white;
     margin: 10px 0px;
 }
@@ -38,11 +38,12 @@
     width: 200px;
     padding: auto;
     height: 60px;
+    border: 1px solid #ed2e71;
     border-radius: 15px;
     font-size: medium;
-    color: black;
+    color: #ed2e71;
     font-weight: 500;
-    background: #1de9b6;
+    background: transparent;
     font-family: cursive;
 }
 .head{
@@ -97,5 +98,7 @@
 width: 34px;
 height: 34px;
 margin: 10px;
+background-color: black;
+border: none;
 
 }

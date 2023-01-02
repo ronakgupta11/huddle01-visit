@@ -1,120 +1,22 @@
-import * as PushAPI from "@pushprotocol/restapi";
-import { NotificationItem, chainNameType } from "@pushprotocol/uiweb";
-import { useEffect, useState } from "react";
-
 export default function Notification(props){
-  
-  
-  let repeat;
-  const [notifications,setNotifications] = useState([]);
-  const [recptAddress,setRecptAddress] = useState("");
+  return(
+    <div className="notify">
+      <div className="notification-title">
+        {props.title}
+      </div>
+      <div className="notification-body">
+        {props.body}
+      </div>
+      <div className="notif-btn">
 
-  const [message,setMessage] = useState("")
+      <button className="join-btn btn-sm-mod btn-mod" onClick={() => props.join()}>
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#66ee78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone-call"><path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      </button>
+      <button className="decline-btn btn-sm-mod btn-mod" onClick={() => props.exit("user declined the call")}>
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#911710" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="feather feather-phone-off"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"></path><line x1="23" y1="1" x2="1" y2="23"></line></svg>
+      </button>
+      </div>
+    </div>
 
-  async function getNot(){
-        // window.location.reload(false)
-        const signer = await props.signer(true);
-        const notificationsFromApi = await PushAPI.user.getFeeds({
-            user: `eip155:5:${await signer.getAddress()}`, // user address in CAIP
-            env: 'staging'
-          });
-        setNotifications(notificationsFromApi);
-        console.log("notificatio ",notifications)
-      const rendered_not = notifications.map((oneNotification, i) => {
-        const { 
-            cta,
-            title,
-            message,
-            app,
-            icon,
-            image,
-            url,
-            blockchain,
-            notification
-        } = oneNotification;
-    
-        return (
-          <div>
-
-            <NotificationItem
-                key={`notif-${i}`} // any unique id
-                notificationTitle={title}
-                notificationBody={message}
-                cta={cta}
-                app={app}
-                icon={icon}
-                image={image}
-                url={url}
-                theme="light"
-                chainName={blockchain}
-                // chainName={blockchain as chainNameType} // if using Typescript
-                />
-                <button onClick={()=>handleJoin()}>join Now</button>
-                </div>
-            );
-          });
-        props.renderNot(rendered_not);
-        console.log(window.location.href)
-        // console.log(rendered);
-        // repeat = setInterval(getNot,15000);
-        }
-        const sendNotification = async() => {
-            try {
-    
-              const signer = await props.signer(true);
-              const apiResponse = await PushAPI.payloads.sendNotification({
-                signer,
-                type: 3, // target
-                identityType: 2, // direct payload
-                notification: {
-                  title: `[SDK-TEST] notification TITLE: test`,
-                  body: `[sdk-test] notification BODY Testing notification`
-                },
-                payload: {
-                  title: `8. call requested from ${await signer.getAddress()}`,
-                  body: `${message} [u:#join]`,
-                  cta: "google.com/?join=true",
-                  img: ''
-                },
-                recipients: `eip155:5:${recptAddress}`, // recipient address //get value from input box
-                channel: 'eip155:5:0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161', // your channel address
-                env: 'staging'
-              });
-              
-              // apiResponse?.status === 204, if sent successfully!
-              console.log('API repsonse: ', apiResponse);
-            } catch (err) {
-              console.error('Error: ', err);
-            }
-          }
-          function handleInputChange(event){
-            console.log(event.target.value);
-            setRecptAddress(event.target.value)
-          }
-        
-          function handleMsgChange(event){
-            setMessage(event.target.value);
-            // console.log(event.target.value);
-            // console.log(message);
-          }
-          const url = window.location.href;
-          const urlParam = url.split("=");
-          if(urlParam[1]===true){
-            
-          }
-
-        return(
-        <div className="notification-section">
-          <div className="send-notif">
-            
-            <input type="text" onChange = {handleInputChange} placeholder ="enter wallet address"></input>
-            <input type="text" onChange = {handleMsgChange} placeholder ="enter call msg"></input>
-            <button onClick={sendNotification}>request Call</button>     
-          </div>
-          <div className="get-notif">
-            <button onClick={getNot}>get Notification</button>
-            {props.notification[0]}
-          </div> 
-        </div>
-        )
+  );
 }

@@ -11,7 +11,7 @@
   justify-content: center;
 }
 .head-h1{
-  color: #1de9b6;
+  color: #00e676;
   margin: auto;
   font-family: cursive;
   font-size: 70px;
@@ -19,7 +19,7 @@
 }
 .head-p{
   color: white;
-  font-size: 20px;
+  font-size: 25px;
   font-family: cursive;
   margin: 20px;
 }
@@ -31,7 +31,10 @@
 }
 
 .wallet-add{
-  color: white;
+  color: #78909C;
+  font-family: cursive;
+}
+.input-head{
   font-family: cursive;
 }
 .input-form{
@@ -41,7 +44,7 @@
   padding: 10px;
   font-size: medium;
   background: transparent;
-  border:1px solid #1de9b6;
+  border:1px solid #00e676;
   color: white;
   margin: 10px 0px;
 }
@@ -53,8 +56,12 @@
   font-size: medium;
   color: black;
   font-weight: 500;
-  background: #1de9b6;
+  background: #00e676;
   font-family: cursive;
+  font-weight: 500;
+}
+.btn-mod:hover{
+  color: white;
 }
 .head{
   display: flex;
@@ -72,7 +79,7 @@
 }
 .meet-container{
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-around;
   width: 90%;
   margin: 20px;
@@ -94,11 +101,8 @@
   
   width: 100%;
   height: 100%;
-  border: 1px solid #1de9b6;
-  border-radius: 5px;
-
-
-
+  border: 2px solid #00e676;
+  /* border-radius: 5px; */
 }
 
 .vid-btn{
@@ -110,10 +114,51 @@
 width: 34px;
 height: 34px;
 margin: 10px;
+background: black;
 
+}
+.btn-sm-mod:hover{
+  transform: scale(1.2);
 }
 .btn-dis{
   width:150px;
   height: 30px;
   border-radius: 8px;
+}
+.notification-title{
+  padding: 10px 5px;
+  color: white;
+  font-family: cursive;
+
+
+}
+.notification-body{
+  color: white;
+  font-family: cursive;
+  padding: 0 5px;
+}
+.notify{
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  border: 1px solid #00e676;
+  border-radius: 10px;
+  padding: 10px;
+  /* height: 50px;
+  width: 350px; */
+}
+.notif-btn{
+  margin: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+.get-notif{
+  margin: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: cursive;
+  font-size: 20px;
+
 }
